@@ -26,22 +26,22 @@ export default function RootLayout({
         <div className="drawer lg:drawer-open">
           <input id="drawer" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content flex flex-col">
-            <div className="w-full navbar bg-base-200 lg:hidden">
+            <div className="navbar w-full bg-base-200 lg:hidden">
               <div className="flex-none">
-                <label htmlFor="drawer" className="btn btn-square btn-ghost">
+                <label htmlFor="drawer" className="btn-ghost btn-square btn">
                   <Bars3Icon className="h-6 w-6"></Bars3Icon>
                 </label>
               </div>
-              <div className="flex-1 px-2 mx-2">ロゴ</div>
+              <div className="mx-2 flex-1 px-2">ロゴ</div>
             </div>
             {children}
           </div>
           <nav className="drawer-side">
-            <div className="w-full bg-base-200 sticky top-0 z-20 hidden lg:flex items-center">
+            <div className="sticky top-0 z-20 hidden w-full items-center bg-base-200 lg:flex">
               <div className="text-lg">ロゴ</div>
             </div>
             <label htmlFor="drawer" className="drawer-overlay"></label>
-            <ul className="menu p-4 w-80 h-full bg-base-200 flex-nowrap">
+            <ul className="menu h-full w-80 flex-nowrap bg-base-200 p-4">
               <li>
                 <a>
                   <HomeIcon className="h-6 w-6"></HomeIcon>
