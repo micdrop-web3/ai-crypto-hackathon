@@ -6,10 +6,13 @@ import {
   MagnifyingGlassIcon,
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/solid';
-import { Inter } from 'next/font/google';
+import { Noto_Sans_JP } from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({ subsets: ['latin'] });
+const notoSansJapanese = Noto_Sans_JP({
+  preload: false,
+  weight: ['400', '500'],
+});
 
 // TODO
 export const metadata = {
@@ -24,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja" data-theme="garden">
-      <body className={inter.className}>
+      <body className={notoSansJapanese.className}>
         <div className="drawer lg:drawer-open">
           <input id="drawer" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content flex flex-col">
@@ -44,11 +47,11 @@ export default function RootLayout({
               <div className="sticky top-0 z-20 hidden lg:flex">
                 <div className="text-lg">ロゴ</div>
               </div>
-              <ul className="menu flex-nowrap p-4">
+              <ul className="font-mono menu flex-nowrap p-4 text-lg">
                 <li>
                   <a>
                     <HomeIcon className="h-6 w-6"></HomeIcon>
-                    ダッシュボード
+                    <span className="">ダッシュボード</span>
                   </a>
                 </li>
                 <li>
@@ -81,10 +84,10 @@ export default function RootLayout({
                   画像
                 </div>
                 <div className="flex flex-col">
-                  <div className="flex items-center text-sm font-semibold">
+                  <div className="flex items-center text-sm font-medium">
                     ああああああああ
                   </div>
-                  <div className="flex items-center text-sm font-semibold">
+                  <div className="flex items-center text-sm font-medium">
                     ID:11111111
                   </div>
                 </div>
