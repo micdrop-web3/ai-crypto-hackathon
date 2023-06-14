@@ -1,8 +1,10 @@
 import {
   Bars3Icon,
+  Cog8ToothIcon,
   GiftIcon,
   HomeIcon,
   MagnifyingGlassIcon,
+  QuestionMarkCircleIcon,
 } from '@heroicons/react/24/solid';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -21,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ja" data-theme="cupcake">
+    <html lang="ja" data-theme="garden">
       <body className={inter.className}>
         <div className="drawer lg:drawer-open">
           <input id="drawer" type="checkbox" className="drawer-toggle" />
@@ -37,30 +39,57 @@ export default function RootLayout({
             {children}
           </div>
           <nav className="drawer-side">
-            <div className="sticky top-0 z-20 hidden w-full items-center bg-base-200 lg:flex">
-              <div className="text-lg">ロゴ</div>
-            </div>
             <label htmlFor="drawer" className="drawer-overlay"></label>
-            <ul className="menu h-full w-80 flex-nowrap bg-base-200 p-4">
-              <li>
-                <a>
-                  <HomeIcon className="h-6 w-6"></HomeIcon>
-                  ダッシュボード
-                </a>
-              </li>
-              <li>
-                <a>
-                  <MagnifyingGlassIcon className="h-6 w-6"></MagnifyingGlassIcon>
-                  AITuber
-                </a>
-              </li>
-              <li>
-                <a>
-                  <GiftIcon className="h-6 w-6"></GiftIcon>
-                  ポイント受取
-                </a>
-              </li>
-            </ul>
+            <div className="flex h-screen w-64 flex-col bg-base-200">
+              <div className="sticky top-0 z-20 hidden lg:flex">
+                <div className="text-lg">ロゴ</div>
+              </div>
+              <ul className="menu flex-nowrap p-4">
+                <li>
+                  <a>
+                    <HomeIcon className="h-6 w-6"></HomeIcon>
+                    ダッシュボード
+                  </a>
+                </li>
+                <li>
+                  <a>
+                    <MagnifyingGlassIcon className="h-6 w-6"></MagnifyingGlassIcon>
+                    AITuber
+                  </a>
+                </li>
+                <li>
+                  <a>
+                    <GiftIcon className="h-6 w-6"></GiftIcon>
+                    ポイント受取
+                  </a>
+                </li>
+                <li>
+                  <a>
+                    <QuestionMarkCircleIcon className="h-6 w-6"></QuestionMarkCircleIcon>
+                    ヘルプ
+                  </a>
+                </li>
+                <li>
+                  <a>
+                    <Cog8ToothIcon className="h-6 w-6"></Cog8ToothIcon>
+                    設定
+                  </a>
+                </li>
+              </ul>
+              <div className="m-4 mt-auto flex h-20 items-center gap-3">
+                <div className="flex h-full w-20 items-center justify-center rounded-full bg-white">
+                  画像
+                </div>
+                <div className="flex flex-col">
+                  <div className="flex items-center text-sm font-semibold">
+                    ああああああああ
+                  </div>
+                  <div className="flex items-center text-sm font-semibold">
+                    ID:11111111
+                  </div>
+                </div>
+              </div>
+            </div>
           </nav>
         </div>
       </body>
