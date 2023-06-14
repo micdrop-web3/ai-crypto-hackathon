@@ -1,3 +1,5 @@
+import ProfileIcon from '@/app/_components/ProfileIcon';
+import '@/app/globals.css';
 import {
   Bars3Icon,
   Cog8ToothIcon,
@@ -7,7 +9,7 @@ import {
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/solid';
 import { Noto_Sans_JP } from 'next/font/google';
-import './globals.css';
+import Link from 'next/link';
 
 const notoSansJapanese = Noto_Sans_JP({
   preload: false,
@@ -31,66 +33,56 @@ export default function RootLayout({
         <div className="drawer lg:drawer-open">
           <input id="drawer" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content flex flex-col">
-            <div className="navbar w-full bg-base-200 lg:hidden">
+            <header className="navbar w-full bg-base-200 lg:hidden">
               <div className="flex-none">
                 <label htmlFor="drawer" className="btn-ghost btn-square btn">
                   <Bars3Icon className="h-6 w-6"></Bars3Icon>
                 </label>
               </div>
               <div className="mx-2 flex-1 px-2">ロゴ</div>
-            </div>
-            {children}
+            </header>
+            <main className="container p-5 lg:p-10">{children}</main>
           </div>
           <nav className="drawer-side">
             <label htmlFor="drawer" className="drawer-overlay"></label>
-            <div className="flex h-screen w-64 flex-col bg-base-200">
+            <div className="flex h-screen w-72 flex-col bg-base-200">
               <div className="sticky top-0 z-20 hidden lg:flex">
                 <div className="text-lg">ロゴ</div>
               </div>
-              <ul className="font-mono menu flex-nowrap p-4 text-lg">
+              <ul className="menu flex-nowrap p-4 font-mono text-lg">
                 <li>
-                  <a>
+                  <Link href="/">
                     <HomeIcon className="h-6 w-6"></HomeIcon>
                     <span className="">ダッシュボード</span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a>
+                  <Link href="/">
                     <MagnifyingGlassIcon className="h-6 w-6"></MagnifyingGlassIcon>
                     AITuber
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a>
+                  <Link href="/">
                     <GiftIcon className="h-6 w-6"></GiftIcon>
                     ポイント受取
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a>
+                  <Link href="/">
                     <QuestionMarkCircleIcon className="h-6 w-6"></QuestionMarkCircleIcon>
                     ヘルプ
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a>
+                  <Link href="/">
                     <Cog8ToothIcon className="h-6 w-6"></Cog8ToothIcon>
                     設定
-                  </a>
+                  </Link>
                 </li>
               </ul>
-              <div className="m-4 mt-auto flex h-20 items-center gap-3">
-                <div className="flex h-full w-20 items-center justify-center rounded-full bg-white">
-                  画像
-                </div>
-                <div className="flex flex-col">
-                  <div className="flex items-center text-sm font-medium">
-                    ああああああああ
-                  </div>
-                  <div className="flex items-center text-sm font-medium">
-                    ID:11111111
-                  </div>
-                </div>
+              <div className="m-4 mt-auto">
+                <ProfileIcon></ProfileIcon>
               </div>
             </div>
           </nav>
