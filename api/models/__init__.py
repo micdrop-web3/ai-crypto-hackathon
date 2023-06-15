@@ -19,10 +19,12 @@ class Users(Base):
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     channel_id = Column(VARCHAR(255))
+    profile_image_url = Column(VARCHAR(255))
 
 
 class Lives(Base):
     __tablename__ = "lives"
 
     id = Column(Integer, autoincrement=True, primary_key=True)
-    live_chat_id = Column(VARCHAR(255), nullable=False)
+    liver_id = Column(Integer)
+    live_chat_id = Column(VARCHAR(255))
