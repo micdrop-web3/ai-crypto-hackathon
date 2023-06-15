@@ -1,0 +1,10 @@
+runtime: python310
+entrypoint: uvicorn main:app --port $PORT
+service: api
+env: standard
+instance_class: F4_1G
+handlers:
+  - url: .*
+    secure: always
+    script: auto
+    redirect_http_response_code: 301
