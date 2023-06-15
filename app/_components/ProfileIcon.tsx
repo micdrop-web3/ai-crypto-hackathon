@@ -1,16 +1,22 @@
 const ProfileIcon = () => {
   return (
-    <div className="flex h-20 items-center gap-3">
-      <div className="flex h-full w-20 items-center justify-center rounded-full border border-base-300 bg-white">
-        アイコン
+    <div className="flex items-center">
+      <div>
+        <img
+          className="inline-block h-9 w-9 rounded-full"
+          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+          alt=""
+          width={128}
+          height={128}
+        />
       </div>
-      <div className="flex flex-col">
-        <div className="flex items-center text-sm font-semibold">
+      <div className="ml-3">
+        <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
           ああああああああ
-        </div>
-        <div className="flex items-center text-sm font-semibold">
-          ID:1111111
-        </div>
+        </p>
+        <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+          ID:11111111
+        </p>
       </div>
     </div>
   );

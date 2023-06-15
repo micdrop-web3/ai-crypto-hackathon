@@ -1,4 +1,9 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  experimental: {
+    // TODO うまく動かないため無効にする
+    typedRoutes: false,
+  },
+};
 
 module.exports = nextConfig;
