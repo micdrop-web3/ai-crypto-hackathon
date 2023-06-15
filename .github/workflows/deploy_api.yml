@@ -1,5 +1,5 @@
 name: Deploy API
-on: pull_request
+on: push
 jobs:
   deploy:
     name: Deploy
