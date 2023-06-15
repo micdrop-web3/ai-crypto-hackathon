@@ -13,7 +13,7 @@ import Link from 'next/link';
 
 const notoSansJapanese = Noto_Sans_JP({
   preload: false,
-  weight: ['400', '500'],
+  weight: ['400', '600'],
 });
 
 // TODO
@@ -28,12 +28,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ja" data-theme="garden">
+    <html lang="ja" data-theme="winter">
       <body className={notoSansJapanese.className}>
         <div className="drawer lg:drawer-open">
           <input id="drawer" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content flex flex-col">
-            <header className="navbar w-full bg-base-200 lg:hidden">
+            <header className="navbar w-full bg-base-300 lg:hidden">
               <div className="flex-none">
                 <label htmlFor="drawer" className="btn-ghost btn-square btn">
                   <Bars3Icon className="h-6 w-6"></Bars3Icon>
@@ -45,11 +45,11 @@ export default function RootLayout({
           </div>
           <nav className="drawer-side">
             <label htmlFor="drawer" className="drawer-overlay"></label>
-            <div className="flex h-screen w-72 flex-col bg-base-200">
+            <div className="flex h-screen w-72 flex-col bg-base-300">
               <div className="sticky top-0 z-20 hidden lg:flex">
                 <div className="text-lg">ロゴ</div>
               </div>
-              <ul className="menu flex-nowrap p-4 font-mono text-lg">
+              <ul className="menu flex-nowrap p-4 text-lg">
                 <li>
                   <Link href="/">
                     <HomeIcon className="h-6 w-6"></HomeIcon>

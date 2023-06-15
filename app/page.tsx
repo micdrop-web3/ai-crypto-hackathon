@@ -10,23 +10,24 @@ export default function Page() {
         </div>
         <div className="collapse-arrow collapse mt-5 lg:w-1/2">
           <input type="checkbox" className="peer" />
-          <div className="collapse-title pl-0 font-medium">
+          <h2 className="collapse-title pl-0 font-semibold">
             あなたの所有ポイント:
-            <span className="ml-1 text-primary">999 PT</span>
-          </div>
+            <span className="ml-1 text-primary-focus">999 PT</span>
+          </h2>
           <div className="collapse-content">
             <p>内容</p>
           </div>
         </div>
         <div className="collapse-arrow collapse lg:w-1/2">
           <input type="checkbox" className="peer" />
-          <div className="collapse-title pl-0 font-medium">
+          <h2 className="collapse-title pl-0 font-semibold">
             所有ポイントランキング
-          </div>
+          </h2>
           <div className="collapse-content">
             <p>内容</p>
           </div>
         </div>
+        <h2 className="mt-10 font-semibold">特典</h2>
       </article>
     </>
   );
