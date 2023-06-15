@@ -1,13 +1,20 @@
+import ProfileIcon from '@/app/_components/ProfileIcon';
+import '@/app/globals.css';
 import {
   Bars3Icon,
+  Cog8ToothIcon,
   GiftIcon,
   HomeIcon,
   MagnifyingGlassIcon,
+  QuestionMarkCircleIcon,
 } from '@heroicons/react/24/solid';
-import { Inter } from 'next/font/google';
-import './globals.css';
+import { Noto_Sans_JP } from 'next/font/google';
+import Link from 'next/link';
 
-const inter = Inter({ subsets: ['latin'] });
+const notoSansJapanese = Noto_Sans_JP({
+  preload: false,
+  weight: ['400', '600'],
+});
 
 // TODO
 export const metadata = {
@@ -21,46 +28,63 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ja" data-theme="cupcake">
-      <body className={inter.className}>
+    <html lang="ja" data-theme="winter">
+      <body className={notoSansJapanese.className}>
         <div className="drawer lg:drawer-open">
           <input id="drawer" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content flex flex-col">
-            <div className="navbar w-full bg-base-200 lg:hidden">
+            <header className="navbar w-full bg-base-300 lg:hidden">
               <div className="flex-none">
                 <label htmlFor="drawer" className="btn-ghost btn-square btn">
                   <Bars3Icon className="h-6 w-6"></Bars3Icon>
                 </label>
               </div>
               <div className="mx-2 flex-1 px-2">ロゴ</div>
-            </div>
-            {children}
+            </header>
+            <main className="container p-5 lg:p-10">{children}</main>
           </div>
           <nav className="drawer-side">
-            <div className="sticky top-0 z-20 hidden w-full items-center bg-base-200 lg:flex">
-              <div className="text-lg">ロゴ</div>
-            </div>
             <label htmlFor="drawer" className="drawer-overlay"></label>
-            <ul className="menu h-full w-80 flex-nowrap bg-base-200 p-4">
-              <li>
-                <a>
-                  <HomeIcon className="h-6 w-6"></HomeIcon>
-                  ダッシュボード
-                </a>
-              </li>
-              <li>
-                <a>
-                  <MagnifyingGlassIcon className="h-6 w-6"></MagnifyingGlassIcon>
-                  AITuber
-                </a>
-              </li>
-              <li>
-                <a>
-                  <GiftIcon className="h-6 w-6"></GiftIcon>
-                  ポイント受取
-                </a>
-              </li>
-            </ul>
+            <div className="flex h-screen w-72 flex-col bg-base-300">
+              <div className="sticky top-0 z-20 hidden lg:flex">
+                <div className="text-lg">ロゴ</div>
+              </div>
+              <ul className="menu flex-nowrap p-4 text-lg">
+                <li>
+                  <Link href="/">
+                    <HomeIcon className="h-6 w-6"></HomeIcon>
+                    <span className="">ダッシュボード</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/">
+                    <MagnifyingGlassIcon className="h-6 w-6"></MagnifyingGlassIcon>
+                    AITuber
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/">
+                    <GiftIcon className="h-6 w-6"></GiftIcon>
+                    ポイント受取
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/">
+                    <QuestionMarkCircleIcon className="h-6 w-6"></QuestionMarkCircleIcon>
+                    ヘルプ
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/">
+                    <Cog8ToothIcon className="h-6 w-6"></Cog8ToothIcon>
+                    設定
+                  </Link>
+                </li>
+              </ul>
+              <div className="m-4 mt-auto">
+                <ProfileIcon></ProfileIcon>
+              </div>
+            </div>
           </nav>
         </div>
       </body>
