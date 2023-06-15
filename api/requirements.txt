@@ -1,0 +1,10 @@
+email-validator
+fastapi
+google-api-python-client
+google-auth-httplib2
+google-cloud-logging
+pydantic
+pymysql
+sqlalchemy
+uvicorn
+werkzeug
