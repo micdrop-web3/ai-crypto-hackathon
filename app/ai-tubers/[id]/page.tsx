@@ -122,183 +122,85 @@ export default function Page({ params }: { params: { id: number } }) {
             </div>
           </div>
         </div>
-        <div className="pb- mt-10 border-b border-gray-200">
+        <div className="mt-10 border-b border-gray-200 pb-3">
           <h2 className="text-xl font-semibold leading-6 text-gray-900">
             あなたの所有ポイント
           </h2>
         </div>
-        <div className=" bg-white">
-          <div className="max-w-7xl">
-            <ul
-              role="list"
-              className="mx-auto mt-5 grid max-w-2xl grid-cols-1 gap-x-6 gap-y-20 sm:grid-cols-2 lg:max-w-4xl lg:gap-x-8 xl:max-w-none"
-            >
-              {badges.map((badge) => (
-                <li
-                  key={badge.name}
-                  className="flex flex-col gap-6 xl:flex-row"
-                >
-                  <img
-                    className="aspect-[1/1] w-24 flex-none rounded-2xl object-cover"
-                    src={badge.imageUrl}
-                    alt=""
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="mt-10 border-b border-gray-200 pb-3">
-            <h2 className="text-xl font-semibold leading-6 text-gray-900">
-              所有ポイントランキング
-            </h2>
-          </div>
-          <ul role="list" className="divide-y divide-gray-100">
-            {rankingUsers.map((rankingUser) => (
-              <li
-                key={rankingUser.rank}
-                className="flex justify-between gap-x-6 py-5"
-              >
-                <div className="flex gap-x-4">
-                  <div className="flex items-center">{rankingUser.rank}</div>
-                  <img
-                    className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                    src={rankingUser.imageUrl}
-                    alt=""
-                  />
-                  <div className="min-w-0 flex-auto">
-                    <p className="text-sm font-semibold leading-6 text-gray-900">
-                      {rankingUser.name}
-                    </p>
-                    <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                      {rankingUser.point} ポイント
-                    </p>
-                  </div>
-                </div>
+        <div className="max-w-7xl">
+          <ul
+            role="list"
+            className="mx-auto mt-5 grid max-w-2xl grid-cols-1 gap-x-6 gap-y-20 sm:grid-cols-2 lg:max-w-4xl lg:gap-x-8 xl:max-w-none"
+          >
+            {badges.map((badge) => (
+              <li key={badge.name} className="flex flex-col gap-6 xl:flex-row">
+                <img
+                  className="aspect-[1/1] w-24 flex-none rounded-2xl object-cover"
+                  src={badge.imageUrl}
+                  alt=""
+                />
               </li>
             ))}
           </ul>
-          <h2 className="mt-10 text-xl font-semibold leading-6 text-gray-900">
-            特典
-          </h2>
-          {/* Pricing section */}
-          <div className="isolate">
-            <div className="bg-white-50 relative">
-              <div className="max-w-7xl">
-                {/* Feature comparison (up to lg) */}
-                <section
-                  aria-labelledby="mobile-comparison-heading"
-                  className="lg:hidden"
-                >
-                  <h2 id="mobile-comparison-heading" className="sr-only">
-                    Feature comparison
-                  </h2>
-
-                  <div className="max-w-2xl space-y-16">
-                      <div>
-                        <div className="space-y-10">
-                          <div key={pricing.section.name}>
-                            <div className="relative mt-4">
-                              <div
-                                aria-hidden="true"
-                                className="absolute inset-y-0 right-0 hidden w-1/2 rounded-lg bg-white shadow-sm sm:block"
-                              />
-                              <div className="relative rounded-lg bg-white shadow-sm sm:rounded-none sm:bg-transparent sm:shadow-none sm:ring-0">
-                                <dl className="divide-y divide-gray-200 text-sm leading-6">
-                                  {pricing.section.features.map((feature) => (
-                                    <div
-                                      key={feature.name}
-                                      className="flex items-center justify-between py-3 sm:grid sm:grid-cols-2 sm:px-0"
-                                    >
-                                      <dt className="pr-4 text-gray-600">
-                                        {feature.name}
-                                      </dt>
-                                      <dd className="flex items-center justify-end sm:justify-center sm:px-4">
-                                        {feature.tiers ? (
-                                          <CheckIcon
-                                            className="mx-auto h-5 w-5 text-indigo-600"
-                                            aria-hidden="true"
-                                          />
-                                        ) : (
-                                          <XMarkIconMini
-                                            className="mx-auto h-5 w-5 text-gray-400"
-                                            aria-hidden="true"
-                                          />
-                                        )}
-
-                                        <span className="sr-only">
-                                          {feature.tiers ? 'Yes' : 'No'}
-                                        </span>
-                                      </dd>
-                                    </div>
-                                  ))}
-                                </dl>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                  </div>
-                </section>
-
-                {/* Feature comparison (lg+) */}
-                <section
-                  aria-labelledby="comparison-heading"
-                  className="hidden lg:block"
-                >
-                  <h2 id="comparison-heading" className="sr-only">
-                    Feature comparison
-                  </h2>
-
-                  <div className="-mt-6 space-y-16">
-                    <div>
-                      <div className="relative -mx-8 mt-8">
-                        <table className="relative w-full border-separate border-spacing-x-8">
-                          <tbody>
-                            {pricing.section.features.map(
-                              (feature, featureIdx) => (
-                                <tr key={feature.name}>
-                                  <th
-                                    scope="row"
-                                    className="w-1/4 py-3 pr-4 text-left text-sm font-normal leading-6 text-gray-900"
-                                  >
-                                    {feature.name}
-                                    {featureIdx !==
-                                    pricing.section.features.length - 1 ? (
-                                      <div className="absolute inset-x-8 mt-3 h-px bg-gray-200" />
-                                    ) : null}
-                                  </th>
-                                  <td className="relative w-1/4 px-4 py-0 text-center">
-                                    <span className="relative h-full w-full py-3">
-                                      {feature.tiers ? (
-                                        <CheckIcon
-                                          className="mx-auto h-5 w-5 text-indigo-600"
-                                          aria-hidden="true"
-                                        />
-                                      ) : (
-                                        <XMarkIconMini
-                                          className="mx-auto h-5 w-5 text-gray-400"
-                                          aria-hidden="true"
-                                        />
-                                      )}
-
-                                      <span className="sr-only">
-                                        {feature.tiers ? 'Yes' : 'No'}
-                                      </span>
-                                    </span>
-                                  </td>
-                                </tr>
-                              )
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              </div>
-            </div>
-          </div>
         </div>
+        <div className="mt-10 border-b border-gray-200 pb-3">
+          <h2 className="text-xl font-semibold leading-6 text-gray-900">
+            所有ポイントランキング
+          </h2>
+        </div>
+        <ul role="list" className="divide-y divide-gray-100">
+          {rankingUsers.map((rankingUser) => (
+            <li
+              key={rankingUser.rank}
+              className="flex justify-between gap-x-6 py-5"
+            >
+              <div className="flex gap-x-4">
+                <div className="flex items-center">{rankingUser.rank}</div>
+                <img
+                  className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                  src={rankingUser.imageUrl}
+                  alt=""
+                />
+                <div className="min-w-0 flex-auto">
+                  <p className="text-sm font-semibold leading-6 text-gray-900">
+                    {rankingUser.name}
+                  </p>
+                  <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                    {rankingUser.point} ポイント
+                  </p>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <h2 className="mt-10 text-xl font-semibold leading-6 text-gray-900">
+          特典
+        </h2>
+        <section className="mt-2">
+          <dl className="divide-y divide-gray-200 text-sm leading-6">
+            {pricing.section.features.map((feature) => (
+              <div
+                key={feature.name}
+                className="flex items-center justify-between py-3 sm:grid sm:grid-cols-2 sm:px-0"
+              >
+                <dt className="pr-4 text-gray-600">{feature.name}</dt>
+                <dd className="flex items-center justify-end sm:justify-center sm:px-4">
+                  {feature.tiers ? (
+                    <CheckIcon
+                      className="mx-auto h-5 w-5 text-indigo-600"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <XMarkIconMini
+                      className="mx-auto h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  )}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
       </article>
     </>
   );

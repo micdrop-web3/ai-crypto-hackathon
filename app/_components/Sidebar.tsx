@@ -11,7 +11,7 @@ import { usePathname } from 'next/navigation';
 
 import React, { Fragment, useState } from 'react';
 
-const Sidebar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const Sidebar = () => {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -185,10 +185,6 @@ const Sidebar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <ProfileIcon></ProfileIcon>
         </div>
       </div>
-
-      <main className="py-10 lg:pl-72">
-        <div className="px-4 sm:px-6 lg:px-8">{children}</div>
-      </main>
     </>
   );
 };
