@@ -1,15 +1,6 @@
-import ProfileIcon from '@/app/_components/ProfileIcon';
+import Sidebar from '@/app/_components/Sidebar';
 import '@/app/globals.css';
-import {
-  Bars3Icon,
-  Cog8ToothIcon,
-  GiftIcon,
-  HomeIcon,
-  MagnifyingGlassIcon,
-  QuestionMarkCircleIcon,
-} from '@heroicons/react/24/solid';
 import { Noto_Sans_JP } from 'next/font/google';
-import Link from 'next/link';
 
 const notoSansJapanese = Noto_Sans_JP({
   preload: false,
@@ -30,63 +21,10 @@ export default function RootLayout({
   return (
     <html lang="ja" data-theme="winter">
       <body className={notoSansJapanese.className}>
-        <div className="drawer lg:drawer-open">
-          <input id="drawer" type="checkbox" className="drawer-toggle" />
-          <div className="drawer-content flex flex-col">
-            <header className="navbar w-full bg-base-300 lg:hidden">
-              <div className="flex-none">
-                <label htmlFor="drawer" className="btn-ghost btn-square btn">
-                  <Bars3Icon className="h-6 w-6"></Bars3Icon>
-                </label>
-              </div>
-              <div className="mx-2 flex-1 px-2">ロゴ</div>
-            </header>
-            <main className="container p-5 lg:p-10">{children}</main>
-          </div>
-          <nav className="drawer-side">
-            <label htmlFor="drawer" className="drawer-overlay"></label>
-            <div className="flex h-screen w-72 flex-col bg-base-300">
-              <div className="sticky top-0 z-20 hidden lg:flex">
-                <div className="text-lg">ロゴ</div>
-              </div>
-              <ul className="menu flex-nowrap p-4 text-lg">
-                <li>
-                  <Link href="/">
-                    <HomeIcon className="h-6 w-6"></HomeIcon>
-                    <span className="">ダッシュボード</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <MagnifyingGlassIcon className="h-6 w-6"></MagnifyingGlassIcon>
-                    AITuber
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <GiftIcon className="h-6 w-6"></GiftIcon>
-                    ポイント受取
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <QuestionMarkCircleIcon className="h-6 w-6"></QuestionMarkCircleIcon>
-                    ヘルプ
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <Cog8ToothIcon className="h-6 w-6"></Cog8ToothIcon>
-                    設定
-                  </Link>
-                </li>
-              </ul>
-              <div className="m-4 mt-auto">
-                <ProfileIcon></ProfileIcon>
-              </div>
-            </div>
-          </nav>
-        </div>
+        <Sidebar></Sidebar>
+        <main className="py-10 lg:pl-72">
+          <div className="px-4 sm:px-6 lg:px-8">{children}</div>
+        </main>
       </body>
     </html>
   );
