@@ -19,6 +19,10 @@ jobs:
         with:
           node-version: 18
           cache: "pnpm"
+      - name: test
+        run: |
+          pwd
+          ls -la
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Lint

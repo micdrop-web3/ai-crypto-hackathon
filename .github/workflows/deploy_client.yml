@@ -1,9 +1,9 @@
 name: Deploy Client
 on:
   pull_request:
-    branches:
-      - main
-    types: [closed]
+    # branches:
+    #  - main
+    # types: [closed]
 env:
   PROJECT_ID: corefan # TODO: update Google Cloud project id
   GAR_LOCATION: us-central1 # TODO: update Artifact Registry location
