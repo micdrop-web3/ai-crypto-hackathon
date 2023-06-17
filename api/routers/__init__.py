@@ -1,6 +1,7 @@
 from typing import List
 
 from fastapi import APIRouter, Depends
+from sqlalchemy import func
 from sqlalchemy.orm import Session, aliased
 
 import schemas
@@ -145,6 +146,70 @@ async def list_point_for_user(
         .first()
     )
     return point.value
+
+
+@router.get(
+    "/ranking/liver",
+)
+async def ranking_liver(
+    liver_channel_id: str,
+    db: Session = Depends(get_db),
+):
+    """ある配信者ポイントの獲得ランキング"""
+    Liver = aliased(User)
+    Listener = aliased(User)
+
+    ranking = (
+        db.query(Point, Listener)
+        .join(Liver, Liver.id == Point.liver_id)
+        .outerjoin(
+            Listener,
+            Listener.channel_id == Point.listener_channel_id,
+        )
+        .filter(
+            Liver.channel_id == liver_channel_id,
+        )
+        .order_by(Point.value.desc())
+        .limit(100)
+        .all()
+    )
+    return [
+        (point.value, point.listener_channel_id)
+        for point, listener in ranking
+    ]
+
+
+@router.get(
+    "/ranking/comment_count",
+)
+async def ranking_comment_count(
+    liver_channel_id: str,
+    db: Session = Depends(get_db),
+):
+    """ある配信者コメント回数ランキング"""
+    Liver = aliased(User)
+    Listener = aliased(User)
+
+    ranking = (
+        db.query(func.counts(Comment), Listener)
+        .join(Live, Live.live_chat_id == Comment.live_chat_id)
+        .join(Liver, Liver.id == Live.liver_id)
+        .outerjoin(
+            Listener,
+            Listener.channel_id == Comment.author_channel_id,
+        )
+        .filter(
+            Liver.channel_id == liver_channel_id,
+        )
+        .group_by(Comment.author_channel_id)
+        .order_by(func.counts(Comment).desc())
+        .limit(100)
+        .all()
+    )
+    return [
+        (count, getattr(listener, "listener_channel_id", ""))
+        for count, listener in ranking
+    ]
 
 
 @router.put(
