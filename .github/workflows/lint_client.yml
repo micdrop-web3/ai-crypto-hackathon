@@ -2,8 +2,11 @@ name: "lint"
 on:
   - pull_request
 jobs:
-  lint:
+  lint_client:
     runs-on: "ubuntu-latest"
+    defaults:
+      run:
+        working-directory: client
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -16,6 +19,7 @@ jobs:
         with:
           node-version: 18
           cache: "pnpm"
+          cache-dependency-path: '**/pnpm-lock.yaml'
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Lint
