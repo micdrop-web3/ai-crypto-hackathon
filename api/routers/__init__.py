@@ -1,11 +1,13 @@
-from typing import List, Union
+from typing import List
 
-from fastapi import APIRouter, Depends, Header, HTTPException, status
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends
+from sqlalchemy import func
+from sqlalchemy.orm import Session, aliased
 
+import schemas
+import services
 from database import get_db
-from models import Comments as mComments
-from schemas.comments import Comments as sComments
+from models import Comment, Live, Point, User
 
 router = APIRouter()
 
@@ -13,98 +15,268 @@ router = APIRouter()
 @router.post(
     "/live_chat/starts",
 )
-async def start__live_chat(
+async def register_live(
+    live_id: str,
+    liver_channel_id: str,
     db: Session = Depends(get_db),
 ):
-    """ライブチャットを開始"""
-    pass
+    """ライブを登録"""
+
+    await services.register_live(live_id, liver_channel_id, db)
+    return {"status": "ok"}
+
+
+@router.post(
+    "/cron/live",
+)
+async def get_and_register_comments(
+    db: Session = Depends(get_db),
+):
+    """終了していないライブのコメントを取得してDB登録"""
+
+    await services.get_and_register_comments(db)
+    return {"status": "ok"}
 
 
 @router.get(
     "/user/comments/last",
-    response_model=List[sComments],
+    response_model=List[schemas.Comment],
 )
-async def list_last_comments(
+async def list_last_comments_for_user(
     channel_id: str,
-    num: int,
+    num: int = 100,
     db: Session = Depends(get_db),
 ):
     """最新のnum個のコメントを列挙"""
-    pass
+    cmts = (
+        db.query(Comment)
+        .filter(
+            Comment.author_channel_id == channel_id,
+        )
+        .order_by(Comment.published_at.desc())
+        .limit(num)
+    )
+    return [schemas.Comment.from_orm(cmt) for cmt in cmts]
 
 
 @router.get(
     "/user/comments/list",
-    response_model=List[sComments],
+    response_model=List[schemas.Comment],
 )
-async def list_comments(
+async def list_comments_for_user(
     channel_id: str,
     page: int = 1,
     per_page: int = 100,
     db: Session = Depends(get_db),
 ):
-    pagi = (
-        db.query(mComments)
+    cmts = (
+        db.query(Comment)
         .filter(
-            mComments.author_channel_id == channel_id,
+            Comment.author_channel_id == channel_id,
         )
-        .pagenate(page=page, per_page=per_page, error_out=True)
+        .order_by(Comment.published_at.desc())
+        .offset(per_page * (page - 1))
+        .limit(per_page)
     )
-    return [sComments(cmt) for cms in pagi.items]
+    return [schemas.Comment.from_orm(cmt) for cmt in cmts]
 
 
 @router.get(
     "/live/comments/last",
-    response_model=List[sComments],
+    response_model=List[schemas.Comment],
 )
-async def list_last_comments(
+async def list_last_comments_for_live(
     live_chat_id: str,
-    num: int,
+    num: int = 100,
     db: Session = Depends(get_db),
 ):
     """最新のnum個のコメントを列挙"""
-    pass
+    cmts = (
+        db.query(Comment)
+        .filter(
+            Comment.live_chat_id == live_chat_id,
+        )
+        .order_by(Comment.published_at.desc())
+        .limit(num)
+    )
+    return [schemas.Comment.from_orm(cmt) for cmt in cmts]
 
 
 @router.get(
     "/live/comments/list",
-    response_model=List[sComments],
+    response_model=List[schemas.Comment],
 )
-async def list_comments(
+async def list_live_comments_for_live(
     live_chat_id: str,
     page: int = 1,
     per_page: int = 100,
     db: Session = Depends(get_db),
 ):
-    pagi = (
-        db.query(mComments)
+    cmts = (
+        db.query(Comment)
         .filter(
-            mComments.live_chat_id == live_chat_id,
+            Comment.live_chat_id == live_chat_id,
         )
-        .pagenate(page=page, per_page=per_page, error_out=True)
+        .order_by(Comment.published_at.desc())
+        .offset(per_page * (page - 1))
+        .limit(per_page)
     )
-    return [sComments(cmt) for cms in pagi.items]
+    return [schemas.Comment.from_orm(cmt) for cmt in cmts]
 
 
 @router.get(
     "/user/point",
     response_model=int,
 )
-async def list_comments(
+async def list_point_for_user(
     channel_id: str,
+    liver_channel_id: str,
     db: Session = Depends(get_db),
 ):
     """ユーザの所有ポイント"""
-    pass
+    Liver = aliased(User)
+
+    point = (
+        db.query(Point)
+        .join(Liver, Liver.id == Point.liver_id)
+        .filter(
+            Liver.channel_id == liver_channel_id,
+            Point.listener_channel_id == channel_id,
+        )
+        .first()
+    )
+    return point.value
+
+
+@router.get(
+    "/ranking/liver",
+)
+async def ranking_liver(
+    liver_channel_id: str,
+    db: Session = Depends(get_db),
+):
+    """ある配信者ポイントの獲得ランキング"""
+    Liver = aliased(User)
+    Listener = aliased(User)
+
+    ranking = (
+        db.query(Point, Listener)
+        .join(Liver, Liver.id == Point.liver_id)
+        .outerjoin(
+            Listener,
+            Listener.channel_id == Point.listener_channel_id,
+        )
+        .filter(
+            Liver.channel_id == liver_channel_id,
+        )
+        .order_by(Point.value.desc())
+        .limit(100)
+        .all()
+    )
+    return [
+        (point.value, point.listener_channel_id)
+        for point, listener in ranking
+    ]
+
+
+@router.get(
+    "/ranking/comment_count",
+)
+async def ranking_comment_count(
+    liver_channel_id: str,
+    db: Session = Depends(get_db),
+):
+    """ある配信者コメント回数ランキング"""
+    Liver = aliased(User)
+    Listener = aliased(User)
+
+    ranking = (
+        db.query(func.counts(Comment), Listener)
+        .join(Live, Live.live_chat_id == Comment.live_chat_id)
+        .join(Liver, Liver.id == Live.liver_id)
+        .outerjoin(
+            Listener,
+            Listener.channel_id == Comment.author_channel_id,
+        )
+        .filter(
+            Liver.channel_id == liver_channel_id,
+        )
+        .group_by(Comment.author_channel_id)
+        .order_by(func.counts(Comment).desc())
+        .limit(100)
+        .all()
+    )
+    return [
+        (count, getattr(listener, "listener_channel_id", ""))
+        for count, listener in ranking
+    ]
 
 
 @router.put(
+    "/user",
+)
+async def read_user(
+    channel_id: str,
+    db: Session = Depends(get_db),
+):
+    user = db.query(User).filter(User.channel_id == channel_id).first()
+    return schemas.User.from_orm(user)
+
+
+@router.post(
     "/users",
-    response_model=int,
 )
 async def put_user(
     channel_id: str,
     db: Session = Depends(get_db),
 ):
-    """ユーザ情報を編集"""
-    pass
+    """ユーザ情報を作成"""
+    user = User(
+        channel_id=channel_id,
+    )
+    db.add(user)
+    db.commit()
+
+
+@router.get(
+    "/comments/list",
+    response_model=List[schemas.Comment],
+)
+async def list_comments(
+    db: Session = Depends(get_db),
+):
+    comments = db.query(Comment).all()
+    return [schemas.Comment.from_orm(comment) for comment in comments]
+
+
+@router.get(
+    "/lives/list",
+    response_model=List[schemas.Live],
+)
+async def list_lives(
+    db: Session = Depends(get_db),
+):
+    lives = db.query(Live).all()
+    return [schemas.Live.from_orm(live) for live in lives]
+
+
+@router.get(
+    "/points/list",
+    response_model=List[schemas.Point],
+)
+async def list_points(
+    db: Session = Depends(get_db),
+):
+    points = db.query(Point).all()
+    return [schemas.Point.from_orm(point) for point in points]
+
+
+@router.get(
+    "/users/list",
+    response_model=List[schemas.User],
+)
+async def list_users(
+    db: Session = Depends(get_db),
+):
+    users = db.query(User).all()
+    return [schemas.User.from_orm(user) for user in users]
