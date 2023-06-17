@@ -2,7 +2,7 @@ name: "lint"
 on:
   - pull_request
 jobs:
-  lint:
+  lint_client:
     runs-on: "ubuntu-latest"
     defaults:
       run:
