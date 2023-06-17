@@ -13,6 +13,9 @@ class Comment(Base):
     published_at = Column(DateTime)
     message_text = Column(Text)
     type = Column(VARCHAR(255))
+    display_name = Column(Text)
+    amount_micros = Column(Integer)
+    currency = Column(VARCHAR(255))
 
 
 class Live(Base):

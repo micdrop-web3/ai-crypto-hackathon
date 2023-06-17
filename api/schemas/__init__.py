@@ -12,6 +12,9 @@ class Comment(BaseModel):
     published_at: datetime
     message_text: str
     type: str
+    display_name: str
+    amount_micros: Union[int, None]
+    currency: Union[str, None]
 
     class Config:
         orm_mode = True

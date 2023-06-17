@@ -86,14 +86,19 @@ async def get_live_for_update(
 
 
 def item2Comment(cmt):
-    return Comment(
+    c = Comment(
         live_chat_id=cmt["snippet"]["liveChatId"],
         author_channel_id=cmt["snippet"]["authorChannelId"],
         author_profile_image_url=cmt["authorDetails"]["profileImageUrl"],
         published_at=str2datetime(cmt["snippet"]["publishedAt"]),
         message_text=cmt["snippet"]["displayMessage"],
         type=cmt["snippet"]["type"],
+        display_name=cmt["authorDetails"]["displayName"],
     )
+    if c.type == "superChatEvent":
+        c.amount_micros = int(cmt["snippet"]["superChatDetails"]["amountMicros"])
+        c.currency = cmt["snippet"]["superChatDetails"]["currency"]
+    return c
 
 
 def update_point(point, cmt):
@@ -103,7 +108,8 @@ def update_point(point, cmt):
         # 通常のコメント: 1pt
         # スーパーチャット: 1pt
         point.value += 1
-
+    elif cmt.type == "memberMilestoneChatEvent":
+        point.value += 100
 
 
 async def get_and_register_comments_for_live(
