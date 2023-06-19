@@ -12,7 +12,7 @@ const ProfileIcon = () => {
       </div>
       <div className="ml-3">
         <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-          自分のアカウント
+          自分のアカウント名
         </p>
         <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
           0xfa16...9999
