@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 from fastapi import APIRouter, Depends
 from sqlalchemy import func
@@ -173,10 +173,7 @@ async def ranking_liver(
         .limit(100)
         .all()
     )
-    return [
-        (point.value, point.listener_channel_id)
-        for point, listener in ranking
-    ]
+    return [(point.value, point.listener_channel_id) for point, listener in ranking]
 
 
 @router.get(
@@ -191,7 +188,11 @@ async def ranking_comment_count(
     Listener = aliased(User)
 
     ranking = (
-        db.query(func.counts(Comment), Listener)
+        db.query(
+            func.count(Comment.author_channel_id),
+            Comment.author_channel_id,
+            Listener,
+        )
         .join(Live, Live.live_chat_id == Comment.live_chat_id)
         .join(Liver, Liver.id == Live.liver_id)
         .outerjoin(
@@ -201,18 +202,18 @@ async def ranking_comment_count(
         .filter(
             Liver.channel_id == liver_channel_id,
         )
-        .group_by(Comment.author_channel_id)
-        .order_by(func.counts(Comment).desc())
+        .group_by(Comment.author_channel_id, Listener.id)
+        .order_by(func.count(Comment.author_channel_id).desc())
         .limit(100)
         .all()
     )
     return [
-        (count, getattr(listener, "listener_channel_id", ""))
-        for count, listener in ranking
+        (count, channel_id, lsnr.profile_image_url if lsnr else "")
+        for count, channel_id, lsnr in ranking
     ]
 
 
-@router.put(
+@router.get(
     "/user",
 )
 async def read_user(
@@ -235,6 +236,23 @@ async def put_user(
         channel_id=channel_id,
     )
     db.add(user)
+    db.commit()
+
+
+@router.put(
+    "/users",
+)
+async def put_user(
+    channel_id: str,
+    address: Union[str, None] = None,
+    db: Session = Depends(get_db),
+):
+    """ユーザ情報を作成"""
+    user = (
+        db.query(User).filter(User.channel_id == channel_id).with_for_update().first()
+    )
+    if address:
+        user.address = address
     db.commit()
 
 
