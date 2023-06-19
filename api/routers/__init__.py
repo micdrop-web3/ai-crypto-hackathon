@@ -227,7 +227,7 @@ async def read_user(
 @router.post(
     "/users",
 )
-async def put_user(
+async def gen_user(
     channel_id: str,
     db: Session = Depends(get_db),
 ):
