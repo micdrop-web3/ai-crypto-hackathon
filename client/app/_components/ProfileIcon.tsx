@@ -12,10 +12,10 @@ const ProfileIcon = () => {
       </div>
       <div className="ml-3">
         <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-          ああああああああ
+          自分のアカウント
         </p>
         <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
-          ID:11111111
+          0xfa16...9999
         </p>
       </div>
     </div>
