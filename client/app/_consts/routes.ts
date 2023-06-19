@@ -7,19 +7,19 @@ import {
 } from '@heroicons/react/24/outline';
 
 export const routes = [
-  { name: 'ダッシュボード', href: '/', icon: HomeIcon, sidebar: true },
+  { name: 'トップページ', href: '#', icon: HomeIcon, sidebar: true },
   {
-    name: 'AITuber',
-    href: '/ai-tubers',
+    name: '検索',
+    href: '#',
     icon: MagnifyingGlassIcon,
     sidebar: true,
   },
-  { name: 'ポイント受取', href: '/gift', icon: GiftIcon, sidebar: true },
+  { name: 'ポイント取引', href: '#', icon: GiftIcon, sidebar: true },
   {
     name: 'ヘルプ',
-    href: '/help',
+    href: '#',
     icon: QuestionMarkCircleIcon,
     sidebar: true,
   },
-  { name: '設定', href: '/setting', icon: Cog8ToothIcon, sidebar: true },
+  { name: '設定', href: '#', icon: Cog8ToothIcon, sidebar: true },
 ] as const;
