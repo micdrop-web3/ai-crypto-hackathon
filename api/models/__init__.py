@@ -1,4 +1,4 @@
-from sqlalchemy import VARCHAR, Column, DateTime, ForeignKey, Integer, Text
+from sqlalchemy import CHAR, VARCHAR, Column, DateTime, ForeignKey, Integer, Text
 
 from database import Base
 
@@ -7,6 +7,7 @@ class Comment(Base):
     __tablename__ = "comments"
 
     id = Column(Integer, autoincrement=True, primary_key=True)
+    live_id = Column(VARCHAR(255))
     live_chat_id = Column(VARCHAR(255), nullable=False)
     author_channel_id = Column(VARCHAR(255))
     author_profile_image_url = Column(VARCHAR(255))
@@ -39,11 +40,13 @@ class Point(Base):
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     listener_channel_id = Column(VARCHAR(255))
+    live_id = Column(VARCHAR(255))
     liver_id = Column(
         Integer,
         ForeignKey("users.id", onupdate="CASCADE", ondelete="CASCADE"),
     )
     value = Column(Integer, default=0)
+    paid_out_tx = Column(VARCHAR(255))
 
 
 class User(Base):
@@ -51,5 +54,7 @@ class User(Base):
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     channel_id = Column(VARCHAR(255))
+    name = Column(Text)
     profile_image_url = Column(VARCHAR(255))
     wallet = Column(VARCHAR(255))
+    erc20_address = Column(CHAR(42))
