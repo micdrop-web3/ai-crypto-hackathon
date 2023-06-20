@@ -5,7 +5,7 @@ import googleapiclient.discovery
 import googleapiclient.errors
 from fastapi import Depends, HTTPException
 from sqlalchemy import and_, func, or_
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 
 from database import get_db
 from models import Comment, Live, Point, User
@@ -193,7 +193,7 @@ async def transfer_token_as_point(
     point: Point,
     listener: User,
     live: Live,
-    Liver: User,
+    liver: User,
     client,
     db: Session = Depends(get_db),
 ):
@@ -202,8 +202,8 @@ async def transfer_token_as_point(
     )
     tx_hash = transfer_erc20(
         client=client,
-        contract_addr=Liver.erc20_address,
-        to_addr=Listener.wallet,
+        contract_addr=liver.erc20_address,
+        to_addr=listener.wallet,
         value=point_update.value * (10**6),
     )
     point_update.paid_out_tx = tx_hash
