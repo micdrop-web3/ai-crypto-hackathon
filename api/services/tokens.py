@@ -31,5 +31,6 @@ def get_web3_client():
     client.chain_id = int(os.getenv("WEB3_CHAIN_ID"))
     # 良い子のみんなはEOAの秘密鍵を厳重に管理しよう！
     account = Account.from_key(os.getenv("WEB3_SECRET_KEY"))
-    client.middleware_onion.add(construct_sign_and_send_raw_middleware(account))
+    middleware = construct_sign_and_send_raw_middleware(account)
+    client.middleware_onion.add(middleware)
     return client

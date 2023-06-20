@@ -1,13 +1,6 @@
-import os
-from datetime import datetime, timedelta
-
-import googleapiclient.discovery
-import googleapiclient.errors
-from fastapi import Depends, HTTPException
-from sqlalchemy import and_, func, or_
+from sqlalchemy import func
 from sqlalchemy.orm import Session, aliased
 
-from database import get_db
 from models import Comment, Live, Point, User
 
 
@@ -15,7 +8,7 @@ def ranking_points(
     live_id,
     liver_channel_id,
     listener_channel_id,
-    db,
+    db: Session,
 ):
     Liver = aliased(User)
     Listener = aliased(User)
@@ -37,7 +30,9 @@ def ranking_points(
             True if not live_id else Live.live_id == live_id,
         )
         .filter(
-            True if not liver_channel_id else Liver.channel_id == liver_channel_id,
+            True
+            if not liver_channel_id
+            else Liver.channel_id == liver_channel_id,
         )
         .filter(
             True
@@ -77,7 +72,7 @@ def ranking_superchats(
     live_id,
     liver_channel_id,
     listener_channel_id,
-    db,
+    db: Session,
 ):
     Liver = aliased(User)
     Listener = aliased(User)
@@ -103,7 +98,9 @@ def ranking_superchats(
             True if not live_id else Live.live_id == live_id,
         )
         .filter(
-            True if not liver_channel_id else Liver.channel_id == liver_channel_id,
+            True
+            if not liver_channel_id
+            else Liver.channel_id == liver_channel_id,
         )
         .filter(
             True
@@ -143,7 +140,7 @@ def ranking_comments(
     live_id,
     liver_channel_id,
     listener_channel_id,
-    db,
+    db: Session,
 ):
     Liver = aliased(User)
     Listener = aliased(User)
@@ -165,7 +162,9 @@ def ranking_comments(
             True if not live_id else Live.live_id == live_id,
         )
         .filter(
-            True if not liver_channel_id else Liver.channel_id == liver_channel_id,
+            True
+            if not liver_channel_id
+            else Liver.channel_id == liver_channel_id,
         )
         .filter(
             True

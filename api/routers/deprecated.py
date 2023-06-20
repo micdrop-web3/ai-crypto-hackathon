@@ -1,12 +1,11 @@
-from typing import List, Union
+from typing import List
 
 from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
-from sqlalchemy import and_, func, or_
+from sqlalchemy import func
 from sqlalchemy.orm import Session, aliased
 
 import schemas
-import services
 from database import get_db
 from models import Comment, Live, Point, User
 
@@ -161,7 +160,7 @@ async def ranking_liver(
         .limit(100)
         .all()
     )
-    return [(point.value, point.listener_channel_id) for point, listener in ranking]
+    return [(pt.value, pt.listener_channel_id) for pt, lnr in ranking]
 
 
 @router.get(

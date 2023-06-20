@@ -1,4 +1,12 @@
-from sqlalchemy import CHAR, VARCHAR, Column, DateTime, ForeignKey, Integer, Text
+from sqlalchemy import (
+    CHAR,
+    VARCHAR,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    Text,
+)
 
 from database import Base
 

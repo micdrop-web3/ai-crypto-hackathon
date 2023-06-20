@@ -1,13 +1,11 @@
-from typing import List, Union
+from typing import Union
 
 from fastapi import APIRouter, Depends
-from sqlalchemy import func
-from sqlalchemy.orm import Session, aliased
+from sqlalchemy.orm import Session
 
 import schemas
-import services
 from database import get_db
-from models import Comment, Live, Point, User
+from models import Comment, User
 
 router = APIRouter()
 
@@ -48,8 +46,10 @@ async def read_user(
             .first()
         )
         if cmt:
-            s_user.name |= cmt.display_name
-            s_user.profile_image_url |= cmt.profile_image_url
+            s_user.name = s_user.name or cmt.display_name
+            s_user.profile_image_url = (
+                s_user.profile_image_url or cmt.profile_image_url
+            )
     return s_user
 
 
@@ -67,7 +67,10 @@ async def update_user(
 ):
     """ユーザ情報を作成"""
     user = (
-        db.query(User).filter(User.channel_id == channel_id).with_for_update().first()
+        db.query(User)
+        .filter(User.channel_id == channel_id)
+        .with_for_update()
+        .first()
     )
     if name:
         user.name = name
