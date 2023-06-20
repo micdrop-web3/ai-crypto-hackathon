@@ -4,10 +4,13 @@ from datetime import datetime, timedelta
 import googleapiclient.discovery
 import googleapiclient.errors
 from fastapi import Depends, HTTPException
+from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 
 from database import get_db
 from models import Comment, Live, Point, User
+
+from .tokens import get_web3_client, transfer_erc20
 
 
 async def register_live(live_id, liver_channel_id, db):
@@ -130,6 +133,7 @@ async def get_and_register_comments_for_live(
     except googleapiclient.errors.HttpError:
         live_yt = await get_live_from_yt(live_id, client)
         if live_yt.end_time:
+            # ライブ終了
             live.end_time = live_yt.end_time
             live.page_token = None
             db.commit()
@@ -183,6 +187,54 @@ async def get_and_register_comments(
     for live in lives:
         # APIの限界がわからないので1個ずつ処理
         await get_and_register_comments_for_live(live.live_id, client, db)
+
+
+async def transfer_token_as_point(
+    point: Point,
+    listener: User,
+    live: Live,
+    Liver: User,
+    client,
+    db: Session = Depends(get_db),
+):
+    point_update = (
+        db.query(Point).filter(Point.id == point.id).with_for_update().first()
+    )
+    tx_hash = transfer_erc20(
+        client=client,
+        contract_addr=Liver.erc20_address,
+        to_addr=Listener.wallet,
+        value=point_update.value * (10**6),
+    )
+    point_update.paid_out_tx = tx_hash
+    db.commit()
+
+
+async def transfer_tokens_for_finished_live(
+    db: Session = Depends(get_db),
+):
+    """終了したライブのポイントを精算してトークンを送信"""
+
+    Liver = aliased(User)
+    Listener = aliased(User)
+
+    # 終了したライブのポイントを列挙
+    res = (
+        db.query(Point, Liver, Listener)
+        .join(Listener, Listener.channel_id == Point.listener_channel_id)
+        .join(Live, Live.live_id == Point.live_id)
+        .join(Liver, Liver.id == Live.liver_id)
+        .filter(
+            Point.paid_out_tx.is_(None),
+            Listener.wallet.isnot(None),
+            Liver.erc20_address.isnot(None),
+            Live.end_time.isnot(None),
+        )
+        .all()
+    )
+    client = get_web3_client()
+    for point, listener, live, liver in res:
+        await transfer_token_as_point(point, listener, live, liver, client, db)
 
 
 def str2datetime(datetime_s):
