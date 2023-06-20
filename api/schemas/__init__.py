@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 class Comment(BaseModel):
     id: int
+    live_id: str
     live_chat_id: str
     author_channel_id: str
     author_profile_image_url: str
@@ -36,6 +37,7 @@ class Live(BaseModel):
 class Point(BaseModel):
     id: int
     listener_channel_id: str
+    live_id: str
     liver_id: int
     value: int
 
@@ -46,8 +48,10 @@ class Point(BaseModel):
 class User(BaseModel):
     id: int
     channel_id: str
+    name: Union[str, None]
     profile_image_url: Union[str, None]
     wallet: Union[str, None]
+    erc20_address: Union[str, None]
 
     class Config:
         orm_mode = True
