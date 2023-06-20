@@ -1,14 +1,10 @@
-from datetime import date
-from typing import List, Union
+from typing import Union
 
 from fastapi import APIRouter, Depends
-from sqlalchemy import func
-from sqlalchemy.orm import Session, aliased
+from sqlalchemy.orm import Session
 
-import schemas
 import services
 from database import get_db
-from models import Comment, Live, Point, User
 
 router = APIRouter()
 

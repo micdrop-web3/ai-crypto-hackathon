@@ -1,13 +1,8 @@
-from typing import List, Union
-
 from fastapi import APIRouter, Depends
-from sqlalchemy import and_, func, or_
-from sqlalchemy.orm import Session, aliased
+from sqlalchemy.orm import Session
 
-import schemas
 import services
 from database import get_db
-from models import Comment, Live, Point, User
 
 router = APIRouter()
 

@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 import googleapiclient.discovery
 import googleapiclient.errors
 from fastapi import Depends, HTTPException
-from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session, aliased
 
 from database import get_db
@@ -85,11 +84,17 @@ async def get_live_for_update(
     live_id: str,
     db: Session = Depends(get_db),
 ):
-    return db.query(Live).filter(Live.live_id == live_id).with_for_update().first()
+    return (
+        db.query(Live)
+        .filter(Live.live_id == live_id)
+        .with_for_update()
+        .first()
+    )
 
 
-def item2Comment(cmt):
+def item2Comment(cmt, live_id):
     c = Comment(
+        live_id=live_id,
         live_chat_id=cmt["snippet"]["liveChatId"],
         author_channel_id=cmt["snippet"]["authorChannelId"],
         author_profile_image_url=cmt["authorDetails"]["profileImageUrl"],
@@ -99,7 +104,9 @@ def item2Comment(cmt):
         display_name=cmt["authorDetails"]["displayName"],
     )
     if c.type == "superChatEvent":
-        c.amount_micros = int(cmt["snippet"]["superChatDetails"]["amountMicros"])
+        c.amount_micros = int(
+            cmt["snippet"]["superChatDetails"]["amountMicros"]
+        )
         c.currency = cmt["snippet"]["superChatDetails"]["currency"]
     return c
 
@@ -142,16 +149,23 @@ async def get_and_register_comments_for_live(
 
     live.page_token = res["nextPageToken"]
 
-    cmts = [item2Comment(cmt) for cmt in res["items"]]
+    cmts = [item2Comment(cmt, live.live_id) for cmt in res["items"]]
     db.add_all(cmts)
 
     ids = set(cmt.author_channel_id for cmt in cmts)
-    filter_by_exist = Point.listener_channel_id.in_(ids)
-    exist_points = db.query(Point).filter(filter_by_exist).all()
+    exist_points = (
+        db.query(Point)
+        .filter(
+            Point.live_id == live.live_id,
+            Point.listener_channel_id.in_(ids),
+        )
+        .all()
+    )
     not_exist = ids - set(point.listener_channel_id for point in exist_points)
     add_points = [
         Point(
             listener_channel_id=channel_id,
+            live_id=live.live_id,
             liver_id=live.liver_id,
             value=0,
         )
