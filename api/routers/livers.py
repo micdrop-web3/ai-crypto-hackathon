@@ -88,7 +88,7 @@ async def ranking_comments(
     listener_channel_id: Union[str, None] = None,
     db: Session = Depends(get_db),
 ):
-    return services.livers.ranking_superchats(
+    return services.livers.ranking_comments(
         live_id,
         liver_channel_id,
         listener_channel_id,
