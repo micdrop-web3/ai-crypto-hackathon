@@ -7,4 +7,5 @@ pydantic
 pymysql
 sqlalchemy
 uvicorn
+web3
 werkzeug
