@@ -26,3 +26,6 @@ jobs:
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             VERSION=${{ env.VERSION }}
             YOUTUBE_DATA_API_KEY=${{ secrets.YOUTUBE_DATA_API_KEY }}
+            WEB3_PROVIDER_URL=${{ secrets.WEB3_PROVIDER_URL }}
+            WEB3_CHAIN_ID=${{ secrets.WEB3_CHAIN_ID }}
+            WEB3_SECRET_KEY=${{ secrets.WEB3_SECRET_KEY }}
