@@ -172,7 +172,7 @@ def ranking_comments(
             else Comment.author_channel_id == listener_channel_id,
         )
         .group_by(Comment.author_channel_id, Listener.id)
-        .order_by(func.sum(Comment.author_channel_id))
+        .order_by(func.count(Comment.author_channel_id).desc())
         .limit(100)
         .all()
     )

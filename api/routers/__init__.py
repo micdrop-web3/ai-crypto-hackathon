@@ -1,7 +1,7 @@
 from typing import List, Union
 
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 
 import schemas
 from database import get_db
@@ -21,7 +21,7 @@ async def list_comments(
     live_id: Union[str, None] = None,
     author_channel_id: Union[str, None] = None,
     type: Union[str, None] = None,
-    skip: int = 0,
+    offset: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db),
 ):
@@ -38,6 +38,7 @@ async def list_comments(
             else Comment.author_channel_id == author_channel_id,
         )
         .order_by(Comment.published_at.desc())
+        .offset(offset)
         .limit(limit)
         .all()
     )
@@ -51,9 +52,28 @@ async def list_comments(
     tags=TAGS,
 )
 async def list_lives(
+    live_id: Union[str, None] = None,
+    liver_channel_id: Union[str, None] = None,
+    offset: int = 0,
+    limit: int = 100,
     db: Session = Depends(get_db),
 ):
-    lives = db.query(Live).all()
+    Liver = aliased(User)
+    lives = (
+        db.query(Live)
+        .join(Liver, Liver.id == Live.liver_id)
+        .filter(
+            True if live_id is None else Live.live_id == live_id,
+            True
+            if liver_channel_id is None
+            else Liver.channel_id == liver_channel_id,
+        )
+        .order_by(Live.start_time.desc())
+        .offset(offset)
+        .limit(limit)
+        .all()
+    )
+
     return [schemas.Live.from_orm(live) for live in lives]
 
 
