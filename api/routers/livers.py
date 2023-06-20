@@ -70,7 +70,7 @@ async def ranking_superchats(
     JPYのみ
     """
 
-    return services.livers.ranking_liver_superchats(
+    return services.livers.ranking_superchats(
         live_id,
         liver_channel_id,
         listener_channel_id,
@@ -88,7 +88,7 @@ async def ranking_comments(
     listener_channel_id: Union[str, None] = None,
     db: Session = Depends(get_db),
 ):
-    return services.livers.ranking_liver_superchats(
+    return services.livers.ranking_superchats(
         live_id,
         liver_channel_id,
         listener_channel_id,
